@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.getItem("token") ?? null
   );
   const [userData, setUserData] = useState<UserI | null>(
-    JSON.parse(storedUserData ?? "") ?? null
+    storedUserData != null ? JSON.parse(storedUserData ?? "") : null
   );
 
   // useEffect(() => {
