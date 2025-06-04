@@ -2,10 +2,10 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { TiStarFullOutline } from "react-icons/ti";
 import { TiStarOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
-import { MovieDetailInterface } from "../../interface/MovieDetailInterface";
+import { MovieInterface } from "../../interface/MovieInterface";
 
 interface props {
-  data: MovieDetailInterface[];
+  data: MovieInterface[];
 }
 const AdventureMovie: React.FC<props> = ({ data }) => {
   return (
@@ -17,7 +17,7 @@ const AdventureMovie: React.FC<props> = ({ data }) => {
         >
           <Link to={`/movie/${movie.id}`}>
             <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              src={movie.poster}
               alt="Article Image"
               className="rounded-xl h[300px] w-[120px] sm:w-[200px] md:w[150px] object-cover"
             />
@@ -25,7 +25,7 @@ const AdventureMovie: React.FC<props> = ({ data }) => {
           <div className="flex flex-row items-center space-x-4 mt-2 ">
             <div className="flex flex-row items-center space-x-1">
               <TiStarFullOutline className="text-amber-400" size={20} />
-              <p>{movie.vote_average}</p>
+              <p>{movie.average_rating}</p>
             </div>
             <TiStarOutline className="text-red-900" size={20} />
           </div>

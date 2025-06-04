@@ -2,23 +2,34 @@ import React from "react";
 import { FaRegStar } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { TiStarFullOutline } from "react-icons/ti";
-import { TrailerI } from "../../interface/TrailerInterface";
-import { MovieDetailInterface } from "../../interface/MovieDetailInterface";
-import YouTube from "react-youtube";
+// import { TrailerI } from "../../interface/TrailerInterface";
+import { MovieInterface } from "../../interface/MovieInterface";
+// import YouTube from "react-youtube";
 
 interface props {
-  data: MovieDetailInterface;
-  trailer: TrailerI[];
+  data: MovieInterface;
 }
 
-export const MovieDetail: React.FC<props> = ({ data, trailer }) => {
+export const MovieDetail: React.FC<props> = ({ data }) => {
+  // function getYouTubeVideoId(trailer: string) {
+  //   throw new Error("Function not implemented.");
+  // }
+
+  console.log("data.trailer : ", data.trailer);
+  const getYouTubeVideoId = (url: string): string | null => {
+    const match = url.match(
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&?/]+)/
+    );
+    return match ? match[1] : null;
+  };
+
   return (
     <div>
       {/* {data.map((movie) => ( */}
       <div className=" flex flex-col px-16 gap-8 ">
         <div className=" flex flex-row my-6 justify-center gap-32 ">
           <img
-            src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
+            src={data.poster}
             alt="Article Image"
             className="rounded-xl sm:h[100px] w-[120px] sm:w-[400px]  md:w[150px] object-cover "
           />
@@ -29,7 +40,7 @@ export const MovieDetail: React.FC<props> = ({ data, trailer }) => {
                 <p className="font-semibold">Rate</p>
                 <div className="flex flex-row gap-2 items-center">
                   <TiStarFullOutline className="text-amber-400" size={26} />
-                  <p>{data.vote_average}</p>
+                  <p>{data.average_rating}</p>
                 </div>
               </div>
               <div className="text-lg my-10 ">
@@ -46,7 +57,7 @@ export const MovieDetail: React.FC<props> = ({ data, trailer }) => {
             <div className="flex flex-col  space-y-4 mt-2 text-lg">
               <div className="flex flex-row gap-4">
                 <p className="font-semibold">Overview:</p>
-                <p className="font-light"> {data.overview}</p>
+                <p className="font-light"> {data.description}</p>
               </div>
 
               <div className="w-[700px] flex flex-row gap-4">
@@ -60,27 +71,35 @@ export const MovieDetail: React.FC<props> = ({ data, trailer }) => {
                 </p>
               </div>
               <div className="w-[700px] flex flex-row gap-4">
-                <p className="font-semibold">Adult: </p>
-                <p className="font-light">{data.adult ? "Yes" : "No"}</p>
-              </div>
-              <div className="w-[700px] flex flex-row gap-4">
-                {/* <p className="font-semibold">Director: </p>
-                <p>
-                  {credit.crewI
-                    .filter((crew) => crew.job === "Director")
-                    .map((crew) => crew.name)
-                    .join(", ")}
-                </p> */}
+                <p className="font-semibold">Main Actors: </p>
+                <p className="font-light">
+                  {data.actors.map((actor) => actor.name).join(", ")} ...
+                </p>
               </div>
             </div>
           </div>
         </div>
-        {trailer.length > 0 && (
-          <div className="w-[700px] flex flex-col ">
-            <p className="text-3xl font-bold">Trailer</p>
-            <YouTube videoId={trailer[0].key} />
-          </div>
-        )}
+        <div className="flex flex-col mb-4">
+          <p className="text-2xl font-semibold text-center items-start flex mb-4">
+            Trailer
+          </p>
+
+          {data?.trailer && getYouTubeVideoId(data.trailer) ? (
+            <iframe
+              className="rounded-lg"
+              width="100%"
+              height="600"
+              src={`https://www.youtube.com/embed/${getYouTubeVideoId(
+                data.trailer
+              )}`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="YouTube Trailer"
+            ></iframe>
+          ) : (
+            <p className="text-red-500">Invalid YouTube URL</p>
+          )}
+        </div>
       </div>
     </div>
   );

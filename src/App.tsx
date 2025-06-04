@@ -1,7 +1,12 @@
+import { AuthProvider } from "./contexts/UserContext";
 import RouteNavigation from "./routes/routes";
 
 function App() {
-  return <RouteNavigation />;
+  return (
+    <AuthProvider>
+      <RouteNavigation />;
+    </AuthProvider>
+  );
 }
 
 export default App;

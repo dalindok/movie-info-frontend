@@ -4,21 +4,18 @@ import ActionMovie from "../components/genre/Action";
 import Header from "../components/home/Header";
 // import Item from "../components/category/MostRate";
 import Nav from "../components/Nav";
-import { MovieDetailInterface } from "../interface/MovieDetailInterface";
+import { MovieInterface } from "../interface/MovieInterface";
+import config from "../config";
 
 const Action = () => {
-  const [movies, setMovies] = useState<MovieDetailInterface[]>([]);
+  const [movies, setMovies] = useState<MovieInterface[]>([]);
 
   const getMovies = async () => {
-    try {
-      const res = await fetch(
-        "https://api.themoviedb.org/3/discover/movie?api_key=a67e0a07c70242426a9d195d7e13881e&with_genres=28"
-      );
-      const json = await res.json();
-      setMovies(json.results || []); // Ensure movies is always an array
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    }
+    fetch(`${config.baseURL}/api/user/movies?genre_id=2`)
+      .then((res) => res.json())
+      .then(function (json) {
+        setMovies(json.data);
+      });
   };
 
   useEffect(() => {
@@ -29,7 +26,7 @@ const Action = () => {
     <div className="bg-black text-white">
       <Nav />
       <Header />
-      <p className=" pl-10 text-3xl font-semibold">Action</p>
+      <p className=" pl-10 text-3xl font-semibold">Action Movie</p>
       <ActionMovie data={movies} />
       <Footer />
     </div>

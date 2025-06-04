@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { FaSearch } from "react-icons/fa";
+import { useState } from "react";
+import SearchPage from "../pages/SearchPage";
 
 const Nav = () => {
   const navigation = useNavigate();
   const onNavigateTree = (link: string) => {
     navigation(link, { replace: true });
   };
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   return (
     <div
       className="justify-between flex  bg-[#1D1616]
@@ -51,10 +54,17 @@ const Nav = () => {
         {/* </div> */}
       </div>
       <div className="flex flex-row space-x-8 pr-32 items-center">
-        <div className="p-2 bg-white w-72 rounded-2xl flex flex-row space-x-2 items-center">
-          <FaSearch className="text-red-900 ml-2 " size={20} />
-          <p className="text-gray-300 ">search for a movie</p>
-        </div>
+        <button className="text-gray-300" onClick={() => setIsSearchOpen(true)}>
+          <div className="p-2 bg-white w-72 rounded-2xl flex flex-row space-x-2 items-center">
+            <FaSearch className="text-red-900 mx-2" size={20} />
+            search for a movie
+          </div>
+        </button>
+        <SearchPage
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
+        {/* <p className="text-gray-300 "></p> */}
       </div>
     </div>
   );

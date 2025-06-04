@@ -4,42 +4,36 @@ import Footer from "../components/Footer";
 import Subhead from "../components/home/Subhead";
 import UpComingMovie from "../components/category/UpComingMovie";
 import PopularMovie from "../components/category/PopularMovie";
-import MostRate from "../components/category/MostRate";
+// import MostRate from "../components/category/MostRate";
 import { useEffect, useState } from "react";
-import { MovieDetailInterface } from "../interface/MovieDetailInterface";
+import { MovieInterface } from "../interface/MovieInterface";
+import config from "../config";
 
 const Home = () => {
-  const [mostRate, setMostRate] = useState<MovieDetailInterface[]>([]);
-  const [popular, setPopular] = useState<MovieDetailInterface[]>([]);
-  const [upComing, setUpComing] = useState<MovieDetailInterface[]>([]);
+  // const [mostRate, setMostRate] = useState<MovieInterface[]>([]);
+  const [popular, setPopular] = useState<MovieInterface[]>([]);
+  const [upComing, setUpComing] = useState<MovieInterface[]>([]);
 
   useEffect(() => {
-    getMostRates();
-    getsPopular();
+    // getMostRates();
     getUpComing();
+    getsPopular();
   }, []);
 
-  const getMostRates = async () => {
-    fetch(
-      "https://api.themoviedb.org/3/movie/top_rated?api_key=a67e0a07c70242426a9d195d7e13881e"
-    )
+  const getsPopular = () => {
+    fetch(`${config.baseURL}/api/user/movies?popular=true`)
       .then((res) => res.json())
-      .then((json) => setMostRate(json.results));
-  };
-  const getsPopular = async () => {
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?api_key=a67e0a07c70242426a9d195d7e13881e"
-    )
-      .then((res) => res.json())
-      .then((json) => setPopular(json.results));
+      .then(function (json) {
+        setPopular(json.data);
+      });
   };
 
   const getUpComing = async () => {
-    fetch(
-      "https://api.themoviedb.org/3/movie/upcoming?api_key=a67e0a07c70242426a9d195d7e13881e"
-    )
+    fetch(`${config.baseURL}/api/user/movies?upcoming=true`)
       .then((res) => res.json())
-      .then((json) => setUpComing(json.results));
+      .then(function (json) {
+        setUpComing(json.data);
+      });
   };
 
   return (
@@ -51,8 +45,8 @@ const Home = () => {
       <UpComingMovie data={upComing} />
       <p className="pl-10 text-3xl font-semibold">Popular</p>
       <PopularMovie data={popular} />
-      <p className="pl-10 text-3xl font-semibold">Most Rated</p>
-      <MostRate data={mostRate} />
+      {/* <p className="pl-10 text-3xl font-semibold">Most Rated</p>
+      <MostRate data={mostRate} /> */}
       <Footer />
     </div>
   );

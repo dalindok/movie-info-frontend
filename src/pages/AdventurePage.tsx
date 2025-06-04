@@ -3,16 +3,17 @@ import Header from "../components/home/Header";
 import Nav from "../components/Nav";
 import ActionMovie from "../components/genre/Action";
 import { useState, useEffect } from "react";
-import { MovieDetailInterface } from "../interface/MovieDetailInterface";
+import { MovieInterface } from "../interface/MovieInterface";
+import config from "../config";
 
 const Action = () => {
-  const [movies, setMovies] = useState<MovieDetailInterface[]>([]);
+  const [movies, setMovies] = useState<MovieInterface[]>([]);
   const getMovies = async () => {
-    fetch(
-      "https://api.themoviedb.org/3/discover/movie?api_key=a67e0a07c70242426a9d195d7e13881e&with_genres=12"
-    )
+    fetch(`${config.baseURL}/api/user/movies?genre_id=1`)
       .then((res) => res.json())
-      .then((json) => setMovies(json.results));
+      .then(function (json) {
+        setMovies(json.data);
+      });
   };
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const Action = () => {
     <div className="bg-black text-white">
       <Nav />
       <Header />
-      <p className=" pl-10 text-3xl font-semibold">Adventure</p>
+      <p className=" pl-10 text-3xl font-semibold">Adventure Movie</p>
       <ActionMovie data={movies} />
       <Footer />
     </div>

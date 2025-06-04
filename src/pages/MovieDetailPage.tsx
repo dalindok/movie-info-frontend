@@ -4,13 +4,14 @@ import Nav from "../components/Nav";
 import { useEffect, useState } from "react";
 import { MovieDetail } from "../components/Detail/MovieDetail";
 import { TrailerI } from "../interface/TrailerInterface";
-import { MovieDetailInterface } from "../interface/MovieDetailInterface";
+import { MovieInterface } from "../interface/MovieInterface";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { CreaditI } from "../interface/CreditInterface";
+import config from "../config";
 
 const MovieDetailPage = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState<MovieDetailInterface | null>(null);
+  const [movie, setMovie] = useState<MovieInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [trailer, setTrailer] = useState<TrailerI[]>([]);
@@ -18,7 +19,7 @@ const MovieDetailPage = () => {
 
   useEffect(() => {
     getMovies();
-    getCredit();
+    // getCredit();
     // getTrailer();
   }, [id]);
 
@@ -29,63 +30,58 @@ const MovieDetailPage = () => {
   };
 
   const getMovies = async () => {
-    setLoading(true);
     try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=a67e0a07c70242426a9d195d7e13881e`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMovie(data);
-      getTrailer();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  const getTrailer = async () => {
-    try {
-      await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US&api_key=a67e0a07c70242426a9d195d7e13881e`
-      )
+      fetch(`${config.baseURL}/api/user/movies/${id}`)
         .then((res) => res.json())
-        .then((json) => setTrailer(json.results));
-    } catch (err) {
-      console.log(err);
+        .then(function (json) {
+          setMovie(json.data);
+        });
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getCredit = async () => {
-    try {
-      await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=a67e0a07c70242426a9d195d7e13881e`
-      )
-        .then((res) => res.json())
-        .then((json) => setCredit(json.results));
-      console.log("credit : ", credit);
-      // setDirector(
-      //   json.crew.filter(() => crew.job === "Director").map(() => .name)
-      // );
-      // setWriters(
-      //   data.crew
-      //     .filter(() =>
-      //       ["Writer", "Screenplay", "Story"].includes(.job)
-      //     )
-      //     .map(() => .name)
-      // );
-      // setCast(data.cast.slice(0, 5).map(() => .name)); // Top 5 actors
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getTrailer = async () => {
+  //   try {
+  //     await fetch(
+  //       `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US&api_key=a67e0a07c70242426a9d195d7e13881e`
+  //     )
+  //       .then((res) => res.json())
+  //       .then((json) => setTrailer(json.results));
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const getCredit = async () => {
+  //   try {
+  //     await fetch(
+  //       `https://api.themoviedb.org/3/movie/${id}/credits?api_key=a67e0a07c70242426a9d195d7e13881e`
+  //     )
+  //       .then((res) => res.json())
+  //       .then((json) => setCredit(json.results));
+  //     console.log("credit : ", credit);
+  //     // setDirector(
+  //     //   json.crew.filter(() => crew.job === "Director").map(() => .name)
+  //     // );
+  //     // setWriters(
+  //     //   data.crew
+  //     //     .filter(() =>
+  //     //       ["Writer", "Screenplay", "Story"].includes(.job)
+  //     //     )
+  //     //     .map(() => .name)
+  //     // );
+  //     // setCast(data.cast.slice(0, 5).map(() => .name)); // Top 5 actors
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -96,7 +92,7 @@ const MovieDetailPage = () => {
       <button onClick={handleGoBack} className="pt-8 pl-12">
         <IoMdArrowRoundBack className="" size={30} />
       </button>
-      {movie && <MovieDetail data={movie} trailer={trailer} />}
+      {movie && <MovieDetail data={movie} />}
       <Footer />
     </div>
   );

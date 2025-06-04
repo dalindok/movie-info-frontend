@@ -3,7 +3,7 @@ import { TiStarFullOutline } from "react-icons/ti";
 import { TiStarOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
 
-import { MovieDetailInterface } from "../../interface/MovieDetailInterface";
+import { MovieDetailInterface } from "../../interface/MovieInterface";
 
 interface props {
   data: MovieDetailInterface[];
