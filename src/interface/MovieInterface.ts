@@ -11,6 +11,8 @@ export interface MovieInterface {
   average_rating: number;
   created_at: string;
   updated_at: string;
-  genres: Genre[];
-  actors: Actor[];
+  genres: Genre[] | [];
+  actors: Actor[] | [];
+  user_rate: number;
+  is_watchlisted: boolean;
 }

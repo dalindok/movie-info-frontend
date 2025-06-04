@@ -1,7 +1,7 @@
 import { useState } from "react";
 import config from "../../config";
 import { useAuth } from "../../contexts/UserContext";
-// import { useUser } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -9,18 +9,15 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { setAuth } = useAuth();
-  // const [user, setUser] = useUser();
-  //  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setUser({ ...user, [e.target.name]: e.target.value });
-  //   };
+  const navigation = useNavigate();
 
   const onSignUp = async () => {
     try {
       const response = await fetch(`${config.baseURL}/api/user/sign-up`, {
         method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name: username,
           email: email,
@@ -32,15 +29,13 @@ const SignUp = () => {
       const res = await response.json();
 
       if (response.ok && res.token && res.data) {
-        // Store token and user data using AuthContext
         setAuth(res.token, res.data);
-        console.log("Sign Up Success:", res);
-        // Redirect or show success message if needed
       } else {
+        alert("Register Fail!");
         console.error("Sign Up Error:", res.message || res);
-        // Optionally display error message in UI
       }
     } catch (error) {
+      alert("Register Fail!");
       console.error("Network or server error during sign up:", error);
     }
   };
@@ -94,13 +89,14 @@ const SignUp = () => {
         <div className="flex flex-row gap-4 mb-4">
           <button
             onClick={onSignUp}
-            className=" p-2 px-4 bg-red-900 rounded-2xl mt-2"
-          >
+            className=" p-2 px-4 bg-red-900 rounded-2xl mt-2">
             Sign Up
           </button>
-          <button className="mt-2">Cancel</button>
+          <button onClick={() => navigation(-1)} className="mt-2">
+            Cancel
+          </button>
         </div>
-        <p className="font-extralight">Forget Password</p>
+        {/* <p className="font-extralight">Forget Password</p> */}
       </div>
     </div>
   );

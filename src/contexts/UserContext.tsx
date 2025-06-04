@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useState,
-  ReactNode,
-  useContext,
-  useEffect,
-} from "react";
+import { createContext, useState, ReactNode, useContext } from "react";
 import { UserI } from "../interface/UserInterface";
 
 interface AuthContextType {
@@ -17,18 +11,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [userData, setUserData] = useState<UserI | null>(null);
+  const storedUserData = localStorage.getItem("userData");
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token") ?? null
+  );
+  const [userData, setUserData] = useState<UserI | null>(
+    JSON.parse(storedUserData ?? "") ?? null
+  );
 
-  useEffect(() => {
-    // Load token and user data from localStorage on init
-    const storedToken = localStorage.getItem("token");
-    const storedUserData = localStorage.getItem("userData");
-    if (storedToken && storedUserData) {
-      setToken(storedToken);
-      setUserData(JSON.parse(storedUserData));
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Load token and user data from localStorage on init
+  //   const storedToken = localStorage.getItem("token");
+  //   const storedUserData = localStorage.getItem("userData");
+  //   if (storedToken && storedUserData) {
+  //     setToken(storedToken);
+  //     setUserData(JSON.parse(storedUserData));
+  //   }
+  // }, []);
 
   const setAuth = (newToken: string, newUserData: UserI) => {
     setToken(newToken);

@@ -4,24 +4,21 @@ import Footer from "../components/Footer";
 import Subhead from "../components/home/Subhead";
 import UpComingMovie from "../components/category/UpComingMovie";
 import PopularMovie from "../components/category/PopularMovie";
-// import MostRate from "../components/category/MostRate";
 import { useEffect, useState } from "react";
 import { MovieInterface } from "../interface/MovieInterface";
 import config from "../config";
 
 const Home = () => {
-  // const [mostRate, setMostRate] = useState<MovieInterface[]>([]);
   const [popular, setPopular] = useState<MovieInterface[]>([]);
   const [upComing, setUpComing] = useState<MovieInterface[]>([]);
 
   useEffect(() => {
-    // getMostRates();
     getUpComing();
     getsPopular();
   }, []);
 
   const getsPopular = () => {
-    fetch(`${config.baseURL}/api/user/movies?popular=true`)
+    fetch(`${config.baseURL}/api/user/movies?popular=1`)
       .then((res) => res.json())
       .then(function (json) {
         setPopular(json.data);
@@ -29,7 +26,7 @@ const Home = () => {
   };
 
   const getUpComing = async () => {
-    fetch(`${config.baseURL}/api/user/movies?upcoming=true`)
+    fetch(`${config.baseURL}/api/user/movies?upcoming=1`)
       .then((res) => res.json())
       .then(function (json) {
         setUpComing(json.data);
@@ -45,8 +42,6 @@ const Home = () => {
       <UpComingMovie data={upComing} />
       <p className="pl-10 text-3xl font-semibold">Popular</p>
       <PopularMovie data={popular} />
-      {/* <p className="pl-10 text-3xl font-semibold">Most Rated</p>
-      <MostRate data={mostRate} /> */}
       <Footer />
     </div>
   );

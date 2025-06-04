@@ -4,7 +4,7 @@ import Nav from "../components/Nav";
 
 const SignUpPage = () => {
   return (
-    <div>
+    <div className="bg-black text-white">
       <Nav />
       <SignUp />
       <Footer />

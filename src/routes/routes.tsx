@@ -6,7 +6,8 @@ import MoveiDetail from "../pages/MovieDetailPage";
 import Animation from "../pages/AnimationPage";
 import AccountPage from "../pages/AccountPage";
 import WatchlistPage from "../pages/WatchlistPage";
-import SearchPage from "../pages/SearchPage";
+import SignInPage from "../pages/SignInPage";
+import SignUpPage from "../pages/SignUpPage";
 
 const RouteNavigation = () => {
   return (
@@ -19,7 +20,9 @@ const RouteNavigation = () => {
       {/* <Route path="/accoute" element={<Home />} /> */}
       <Route path="/account" element={<AccountPage />} />
       <Route path="/watchlist" element={<WatchlistPage />} />
-      <Route path="/search" element={<SearchPage />} />
+      <Route path="/sign-up" element={<SignUpPage />} />
+      <Route path="/sign-in" element={<SignInPage />} />
+      {/* <Route path="/search" element={<SearchPage />} /> */}
     </Routes>
   );
 };

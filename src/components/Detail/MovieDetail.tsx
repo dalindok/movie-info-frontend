@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaRegStar } from "react-icons/fa";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import {
+  IoIosAddCircleOutline,
+  IoIosCheckmarkCircleOutline,
+} from "react-icons/io";
 import { TiStarFullOutline } from "react-icons/ti";
-// import { TrailerI } from "../../interface/TrailerInterface";
 import { MovieInterface } from "../../interface/MovieInterface";
-// import YouTube from "react-youtube";
+import { useAuth } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import Rate from "../Rate";
+import { onAddMovieToWatchList, onRemoveMovieFromWatchList } from "../../utils";
 
 interface props {
   data: MovieInterface;
+  onReload: () => void;
 }
 
-export const MovieDetail: React.FC<props> = ({ data }) => {
-  // function getYouTubeVideoId(trailer: string) {
-  //   throw new Error("Function not implemented.");
-  // }
+export const MovieDetail: React.FC<props> = ({ data, onReload }) => {
+  const { userData, token } = useAuth();
+  const navigate = useNavigate();
+  const [showRate, setShowRate] = useState(false);
 
-  console.log("data.trailer : ", data.trailer);
   const getYouTubeVideoId = (url: string): string | null => {
     const match = url.match(
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\s&?/]+)/
@@ -25,7 +30,6 @@ export const MovieDetail: React.FC<props> = ({ data }) => {
 
   return (
     <div>
-      {/* {data.map((movie) => ( */}
       <div className=" flex flex-col px-16 gap-8 ">
         <div className=" flex flex-row my-6 justify-center gap-32 ">
           <img
@@ -43,15 +47,52 @@ export const MovieDetail: React.FC<props> = ({ data }) => {
                   <p>{data.average_rating}</p>
                 </div>
               </div>
-              <div className="text-lg my-10 ">
-                <p className="font-semibold">Your Rate</p>
+              <div
+                onClick={() =>
+                  userData
+                    ? data.user_rate != 0
+                      ? null
+                      : setShowRate(true)
+                    : navigate("/account")
+                }
+                className="text-lg my-10 cursor-pointer">
+                <p className="font-semibold">
+                  {data.user_rate == 0 ? "Rate this" : "Your Rate"}
+                </p>
                 <div className="flex flex-row gap-2 items-center">
+                  {data.user_rate != 0 && <p>{data.user_rate}</p>}
                   <FaRegStar className="" size={24} />
                 </div>
               </div>
-              <div className="text-lg my-10  flex flex-row space-x-2 items-center px-6 text-white bg-red-900 rounded-2xl ">
-                <IoIosAddCircleOutline />
-                <p>Watchlist</p>
+              <div
+                onClick={async () =>
+                  userData
+                    ? data.is_watchlisted
+                      ? await onRemoveMovieFromWatchList({
+                          movie_id: data.id,
+                          callBack: function () {
+                            onReload();
+                          },
+                          token: token ?? "",
+                        })
+                      : await onAddMovieToWatchList({
+                          movie_id: data.id,
+                          callBack: function () {
+                            onReload();
+                          },
+                          token: token ?? "",
+                        })
+                    : navigate("/account")
+                }
+                className="text-lg my-10  flex flex-row space-x-2 items-center px-6 text-white bg-red-900 rounded-2xl cursor-pointer">
+                {data.is_watchlisted ? (
+                  <IoIosCheckmarkCircleOutline />
+                ) : (
+                  <IoIosAddCircleOutline />
+                )}
+                <p>
+                  {data.is_watchlisted ? "Remove Watchlist" : "Add Watchlist"}
+                </p>
               </div>
             </div>
             <div className="flex flex-col  space-y-4 mt-2 text-lg">
@@ -94,13 +135,19 @@ export const MovieDetail: React.FC<props> = ({ data }) => {
               )}`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              title="YouTube Trailer"
-            ></iframe>
+              title="YouTube Trailer"></iframe>
           ) : (
             <p className="text-red-500">Invalid YouTube URL</p>
           )}
         </div>
       </div>
+      {showRate && (
+        <Rate
+          movie_id={data.id}
+          onClose={() => setShowRate(false)}
+          callBack={() => onReload()}
+        />
+      )}
     </div>
   );
 };

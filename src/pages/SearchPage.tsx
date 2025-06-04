@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { TiStarFullOutline, TiStarOutline } from "react-icons/ti";
-import { IoIosAddCircleOutline } from "react-icons/io";
 import { MovieInterface } from "../interface/MovieInterface";
-import { Link } from "react-router-dom";
 import config from "../config";
+import MovieItem from "../components/MovieItem";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -46,8 +44,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       <div className="bg-[#1D1616] w-full max-w-5xl rounded-lg p-4 relative">
         <button
           onClick={onClose}
-          className="absolute top-2 right-4 text-gray-600 hover:text-black"
-        >
+          className="absolute top-2 right-4 text-gray-600 hover:text-black">
           <FaTimes size={30} />
         </button>
 
@@ -65,8 +62,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           {searchQuery && (
             <button
               className="absolute right-3 top-1 text-red-500 cursor-pointer"
-              onClick={() => setSearchQuery("")}
-            >
+              onClick={() => setSearchQuery("")}>
               Clear
             </button>
           )}
@@ -80,35 +76,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {filteredMovies.map((movie) => (
-              <div
-                key={movie.id}
-                className="flex flex-col p-4 text-center items-center"
-              >
-                <Link to={`/movie/${movie.id}`} onClick={onClose}>
-                  <img
-                    src={movie.poster}
-                    alt={movie.title}
-                    className="rounded-xl w-[120px] sm:w-[200px] md:w-[150px] object-cover"
-                  />
-                </Link>
-                <div className="flex flex-row items-center space-x-4 mt-2">
-                  <div className="flex flex-row items-center space-x-1">
-                    <TiStarFullOutline className="text-amber-400" size={20} />
-                    <p>{movie.average_rating}</p>
-                  </div>
-                  <TiStarOutline className="text-red-900" size={20} />
-                </div>
-                <div className="flex flex-col gap-1 items-center mt-1">
-                  <Link to={`/movie/${movie.id}`} onClick={onClose}>
-                    <p className="text-sm font-semibold w-46">{movie.title}</p>
-                  </Link>
-                  <p className="text-sm text-gray-600">{movie.release_date}</p>
-                </div>
-                <div className="flex items-center space-x-2 p-2 bg-red-900 text-white rounded-2xl mt-2 text-sm cursor-pointer">
-                  <IoIosAddCircleOutline />
-                  <p>Watchlist</p>
-                </div>
-              </div>
+              <MovieItem movie={movie} />
             ))}
           </div>
         )}
