@@ -2,6 +2,7 @@ import { useState } from "react";
 import config from "../../config";
 import { useAuth } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -10,8 +11,24 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { setAuth } = useAuth();
   const navigation = useNavigate();
+  const onNavigateTree = (link: string) => {
+    navigation(link, { replace: true });
+  };
 
   const onSignUp = async () => {
+    if (password !== confirmPassword) {
+      // alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
+      return;
+    }
+    if (password.trim().length < 6) {
+      toast.warn("Password must be at least 6 characters long!");
+      return;
+    }
+    if (!email || !username || !password || !confirmPassword) {
+      toast.warn("Please fill in all fields!");
+      return;
+    }
     try {
       const response = await fetch(`${config.baseURL}/api/user/sign-up`, {
         method: "POST",
@@ -25,13 +42,13 @@ const SignUp = () => {
           password_confirmation: confirmPassword,
         }),
       });
-
+      toast.success("Signed up successfully!");
       const res = await response.json();
 
       if (response.ok && res.token && res.data) {
         setAuth(res.token, res.data);
       } else {
-        alert("Register Fail!");
+        toast.error(res.message || "Sign up failed.");
         console.error("Sign Up Error:", res.message || res);
       }
     } catch (error) {
@@ -55,7 +72,7 @@ const SignUp = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className="border-2 py-1.5 border-white rounded-lg w-full"
+            className="border-2 py-2 border-white rounded-lg w-full"
           />
         </div>
         <div className="mb-4 ">
@@ -64,12 +81,16 @@ const SignUp = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
             className="border-2 py-1.5 border-white rounded-lg w-full"
           />
         </div>
 
         <div className="mb-4 ">
           <p className="text-xl mb-1 font-semibold">Password</p>
+          <p className="text-sm text-gray-200 ">
+            Must be more than 6 characters
+          </p>
           <input
             type="text"
             value={password}
@@ -88,8 +109,12 @@ const SignUp = () => {
         </div>
         <div className="flex flex-row gap-4 mb-4">
           <button
-            onClick={onSignUp}
-            className=" p-2 px-4 bg-red-900 rounded-2xl mt-2">
+            onClick={async () => {
+              await onSignUp();
+              onNavigateTree("/account");
+            }}
+            className=" p-2 px-4 bg-red-900 rounded-2xl mt-2"
+          >
             Sign Up
           </button>
           <button onClick={() => navigation(-1)} className="mt-2">

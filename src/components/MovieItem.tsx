@@ -14,7 +14,8 @@ const MovieItem: React.FC<{ movie: MovieInterface }> = ({ movie }) => {
   return (
     <div
       key={movie.id}
-      className=" flex flex-col p-6 rounded-lg text-center items-center ">
+      className=" flex flex-col p-6 rounded-lg text-center items-center "
+    >
       <Link to={`/movie/${movie.id}`}>
         <img
           src={movie.poster}

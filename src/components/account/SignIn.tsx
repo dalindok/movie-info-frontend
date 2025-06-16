@@ -2,13 +2,16 @@ import { useState } from "react";
 import config from "../../config";
 import { useAuth } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const { setAuth } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigate();
-
+  const onNavigateTree = (link: string) => {
+    navigation(link, { replace: true });
+  };
   const onLogin = async () => {
     try {
       const response = await fetch(`${config.baseURL}/api/user/sign-in`, {
@@ -23,11 +26,12 @@ const SignIn = () => {
 
       if (response.ok && res.token && res.data) {
         setAuth(res.token, res.data);
+        toast.success("Logged in successfully!");
       } else {
-        alert("Login Fail!");
+        toast.error(res.message || "Login failed.");
       }
     } catch (error) {
-      alert("Login Fail!");
+      toast.error("Network error");
       console.error("Login error:", error);
     }
   };
@@ -65,8 +69,12 @@ const SignIn = () => {
 
           <div className="flex flex-row gap-4 mb-4">
             <button
-              onClick={onLogin}
-              className="p-2 px-4 bg-red-900 rounded-2xl mt-2">
+              onClick={async () => {
+                await onLogin();
+                onNavigateTree("/account");
+              }}
+              className="p-2 px-4 bg-red-900 rounded-2xl mt-2"
+            >
               Login
             </button>
           </div>

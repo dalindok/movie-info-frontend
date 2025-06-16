@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import Profile from "../../assets/Profile.jpg";
+import Profile from "../../assets/profile.png";
 import { useAuth } from "../../contexts/UserContext";
 
 const UserAccount = () => {
   const { userData, logout } = useAuth();
   const navigate = useNavigate();
-
+  const onNavigateTree = (link: string) => {
+    navigate(link, { replace: true });
+  };
   const handleLogout = () => {
     const confirmed = window.confirm("Are you sure you want to logout?");
     if (confirmed) {
@@ -14,16 +16,14 @@ const UserAccount = () => {
   };
 
   return (
-    <div className="mb-20 mt-10">
-      {/* <button onClick={handleGoBack} className="pt-8 pl-12">
-        <IoMdArrowRoundBack className="" size={30} />
-      </button> */}
+    <div className="mb-42 mt-30">
       <div className="flex flex-row justify-center items-center space-x-50">
-        <img src={Profile} alt="profile" className="w-[350px] object-cover" />
+        <img src={Profile} alt="profile" className="w-[250px] object-cover" />
         <div className="flex flex-col">
           <div
             className=" flex flex-col py-6
-           text-2xl">
+           text-2xl"
+          >
             <div className="flex flex-row gap-4 mb-6">
               <p>Name:</p>
               <p className=" mb-2">{userData?.name}</p>
@@ -35,13 +35,18 @@ const UserAccount = () => {
           </div>
           <div className="flex flex-row gap-4 mb-6">
             <button
-              onClick={handleLogout}
-              className="p-2 px-4 bg-blue-600 rounded-2xl mt-2 cursor-pointer">
+              onClick={async () => {
+                await handleLogout();
+                onNavigateTree("/");
+              }}
+              className="p-2 px-4 bg-blue-600 rounded-2xl mt-2 cursor-pointer"
+            >
               Logout
             </button>
             <button
               onClick={() => navigate("/watchlist", { replace: true })}
-              className=" p-2 px-4 bg-red-900 rounded-2xl mt-2 cursor-pointer">
+              className=" p-2 px-4 bg-red-900 rounded-2xl mt-2 cursor-pointer"
+            >
               WatchList
             </button>
           </div>

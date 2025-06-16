@@ -28,7 +28,7 @@ const WatchlistPage = () => {
   };
 
   return (
-    <div className="bg-black text-white">
+    <div className="bg-black text-white h-screen">
       <Nav />
       <div className="m-12">
         <p className="text-4xl font-bold">My Watchlist</p>
@@ -42,7 +42,9 @@ const WatchlistPage = () => {
           <p>No Watchlist</p>
         )}
       </div>
-      <Footer />
+      <div className="">
+        <Footer />
+      </div>
     </div>
   );
 };
