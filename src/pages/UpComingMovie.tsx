@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import ActionMovie from "../components/genre/Action";
 import Header from "../components/home/Header";
 import Nav from "../components/Nav";
 import { MovieInterface } from "../interface/MovieInterface";
 import config from "../config";
+import UpComingMovie from "../components/category/UpComingMovie";
 
-const Action = () => {
-  const [movies, setMovies] = useState<MovieInterface[]>([]);
+const Upcoming = () => {
+  const [upComing, setUpComing] = useState<MovieInterface[]>([]);
 
-  const getMovies = async () => {
-    fetch(`${config.baseURL}/api/user/movies?genre_id=2`)
+  const getUpComing = async () => {
+    fetch(`${config.baseURL}/api/user/movies?upcoming=1`)
       .then((res) => res.json())
       .then(function (json) {
-        setMovies(json.data);
+        setUpComing(json.data);
       });
   };
 
   useEffect(() => {
-    getMovies();
+    getUpComing();
   }, []);
 
   return (
     <div className="bg-black text-white">
       <Nav />
       <Header />
-      <p className=" pl-10 text-3xl font-semibold">Action Movie</p>
-      <ActionMovie data={movies} />
+      <p className=" pl-10 text-3xl font-semibold">Upcoming Movie</p>
+      <UpComingMovie data={upComing} />
       <Footer />
     </div>
   );
 };
 
-export default Action;
+export default Upcoming;

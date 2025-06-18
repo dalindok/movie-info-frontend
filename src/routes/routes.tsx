@@ -8,6 +8,8 @@ import AccountPage from "../pages/AccountPage";
 import WatchlistPage from "../pages/WatchlistPage";
 import SignInPage from "../pages/SignInPage";
 import SignUpPage from "../pages/SignUpPage";
+import Upcoming from "../pages/UpComingmovie";
+import Popular from "../pages/PopularMovie";
 
 const RouteNavigation = () => {
   return (
@@ -22,6 +24,8 @@ const RouteNavigation = () => {
       <Route path="/watchlist" element={<WatchlistPage />} />
       <Route path="/sign-up" element={<SignUpPage />} />
       <Route path="/sign-in" element={<SignInPage />} />
+      <Route path="/upcoming" element={<Upcoming />} />
+      <Route path="/popular" element={<Popular />} />
       {/* <Route path="/search" element={<SearchPage />} /> */}
     </Routes>
   );

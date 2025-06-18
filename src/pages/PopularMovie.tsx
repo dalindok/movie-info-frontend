@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import ActionMovie from "../components/genre/Action";
 import Header from "../components/home/Header";
 import Nav from "../components/Nav";
 import { MovieInterface } from "../interface/MovieInterface";
 import config from "../config";
+import PopularMovie from "../components/category/PopularMovie";
 
-const Action = () => {
-  const [movies, setMovies] = useState<MovieInterface[]>([]);
+const Popular = () => {
+  const [popular, setPopular] = useState<MovieInterface[]>([]);
 
-  const getMovies = async () => {
-    fetch(`${config.baseURL}/api/user/movies?genre_id=2`)
+  const getPopular = () => {
+    fetch(`${config.baseURL}/api/user/movies?popular=1`)
       .then((res) => res.json())
       .then(function (json) {
-        setMovies(json.data);
+        setPopular(json.data);
       });
   };
 
   useEffect(() => {
-    getMovies();
+    getPopular();
   }, []);
 
   return (
     <div className="bg-black text-white">
       <Nav />
       <Header />
-      <p className=" pl-10 text-3xl font-semibold">Action Movie</p>
-      <ActionMovie data={movies} />
+      <p className=" pl-10 text-3xl font-semibold">Poplar Movie</p>
+      <PopularMovie data={popular} />
       <Footer />
     </div>
   );
 };
 
-export default Action;
+export default Popular;
