@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Profile from "../../assets/profile.png";
+import Profile from "../../assets/Profile.png";
 import { useAuth } from "../../contexts/UserContext";
 
 const UserAccount = () => {
