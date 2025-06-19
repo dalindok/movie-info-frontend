@@ -10,7 +10,7 @@ const Action = () => {
   const [movies, setMovies] = useState<MovieInterface[]>([]);
 
   const getMovies = async () => {
-    fetch(`${config.baseURL}/api/user/movies?genre_id=2`)
+    fetch(`${config.baseURL}/api/user/movies?genre_id=1`)
       .then((res) => res.json())
       .then(function (json) {
         setMovies(json.data);

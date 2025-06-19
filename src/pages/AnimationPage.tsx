@@ -9,7 +9,7 @@ import { MovieInterface } from "../interface/MovieInterface";
 const Animation = () => {
   const [movies, setMovies] = useState<MovieInterface[]>([]);
   const getMovies = async () => {
-    fetch(`${config.baseURL}/api/user/movies?genre_id=3`)
+    fetch(`${config.baseURL}/api/user/movies?genre_id=2`)
       .then((res) => res.json())
       .then(function (json) {
         setMovies(json.data);
