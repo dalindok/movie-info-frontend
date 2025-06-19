@@ -8,8 +8,8 @@ import AccountPage from "../pages/AccountPage";
 import WatchlistPage from "../pages/WatchlistPage";
 import SignInPage from "../pages/SignInPage";
 import SignUpPage from "../pages/SignUpPage";
-import Upcoming from "../pages/UpComingmovie";
 import Popular from "../pages/PopularMovie";
+import Upcoming from "../pages/UpComingMovie";
 
 const RouteNavigation = () => {
   return (
